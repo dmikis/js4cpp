@@ -10,3 +10,7 @@
 *.lai
 *.la
 *.a
+
+# Tests binary
+test-bin
+test-bin.dSYM
