@@ -3,7 +3,7 @@ V = @
 CXX = /opt/local/bin/clang++-mp-3.2
 CXXFLAGS += \
 	-std=c++11 \
-	-I/opt/local/include/ \
+	-isystem /opt/local/include/ \
 	-L/opt/local/lib/ \
 	-lcppunit \
 	-Wall -Wextra \
