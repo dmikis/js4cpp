@@ -1,0 +1,8 @@
+PROJECT_NAME = "js4cpp"
+PROJECT_BRIEF = "Bunch of C++ classes with JavaScript flavor"
+
+BUILTIN_STL_SUPPORT = YES
+
+EXCLUDE_PATTERNS = "*.test.hpp"
+
+GENERATE_LATEX = NO

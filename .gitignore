@@ -14,3 +14,6 @@
 # Tests binary
 test-bin
 test-bin.dSYM
+
+# Docs
+html
