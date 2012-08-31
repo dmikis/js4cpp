@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <functional>
 #include <tr1/functional>
+#include <iterator>
 #include <numeric>
 #include <vector>
 
@@ -14,9 +15,12 @@ template <typename T> class Array
 public:
     explicit Array(size_t length = 0);
 
+    template <class InputIterator>
+    Array(InputIterator begin, InputIterator end);
+
     T & operator [](size_t i);
 
-    ssize_t indexOf(const T & item);
+    ssize_t indexOf(const T & item) const;
 
     void push(const T & value);
 
@@ -37,21 +41,26 @@ public:
     template <typename R>
     Array<R> map(std::tr1::function<R(const T &)> callback) const;
 
-    bool every(std::tr1::function<bool(const T &)> callback) const;
+    bool every(std::tr1::function<bool(const T &)> condition) const;
 
-    Array<T> filter(std::tr1::function<bool(const T &)> callback) const;
+    Array<T> filter(std::tr1::function<bool(const T &)> test) const;
 
-    T reduce(std::tr1::function<T(const T &, const T &)> callback = std::plus<T>());
+    T reduce(std::tr1::function<T(const T &, const T &)> callback = std::plus<T>()) const;
 
-    T reduce(std::tr1::function<T(const T &, const T &)> callback, const T & initialValue, size_t startFrom = 0);
+    T reduce(std::tr1::function<T(const T &, const T &)> callback, const T & initialValue, size_t startFrom = 0) const;
 
     size_t length() const;
+
 private:
     std::vector<T> data_;
 };
 
 template <typename T>
 Array<T>::Array(size_t length) : data_(length) {}
+
+template <typename T>
+template <class InputIterator>
+Array<T>::Array(InputIterator begin, InputIterator end) : data_(begin, end) {}
 
 template <typename T>
 T & Array<T>::operator [](size_t i) {
@@ -71,7 +80,7 @@ T & Array<T>::operator [](size_t i) {
 }
 
 template <typename T>
-ssize_t Array<T>::indexOf(const T & item) {
+ssize_t Array<T>::indexOf(const T & item) const {
     size_t index = std::find(data_.begin(), data_.end(), item) - data_.begin();
 
     return index < data_.size() ? index : -1;
@@ -122,17 +131,11 @@ Array<T> Array<T>::slice(ssize_t begin, ssize_t end) const {
     begin = (length + begin) % length;
     end = (length + end) % length;
 
-    size_t newSize = end > begin ? end - begin : 0;
-    Array<T> result(newSize);
-
-    if (newSize) {
-        std::copy(
-            data_.begin() + begin,
-            data_.end() + end,
-            result.data_.begin());
+    if (end < begin) {
+        return Array<T>();
     }
 
-    return result;
+    return Array<T>(data_.begin() + begin, data_.begin() + end);
 }
 
 template <typename T>
@@ -157,29 +160,29 @@ Array<R> Array<T>::map(std::tr1::function<R(const T &)> callback) const {
 }
 
 template <typename T>
-Array<T> Array<T>::filter(std::tr1::function<bool(const T &)> callback) const {
-    Array<T> result(length());
-    size_t resultSize = std::remove_copy_if(data_.begin(), data_.end(), result.data_.begin(),
-        std::not1(callback)) - result.data_.begin();
+Array<T> Array<T>::filter(std::tr1::function<bool(const T &)> test) const {
+    Array<T> result;
 
-    result.data_.resize(resultSize);
+    std::remove_copy_if(data_.begin(), data_.end(),
+        std::back_inserter(result.data_),
+        std::not1(test));
 
     return result;
 }
 
 template <typename T>
-bool Array<T>::every(std::tr1::function<bool(const T &)> callback) const {
-    return std::find_if(data_.begin(), data_.end(), std::not1(callback)) == data_.end();
+bool Array<T>::every(std::tr1::function<bool(const T &)> condition) const {
+    return std::find_if(data_.begin(), data_.end(), std::not1(condition)) == data_.end();
 }
 
 
 template <typename T>
-T Array<T>::reduce(std::tr1::function<T(const T &, const T&)> callback) {
+T Array<T>::reduce(std::tr1::function<T(const T &, const T&)> callback) const {
     return reduce(callback, data_[0], 1);
 }
 
 template <typename T>
-T Array<T>::reduce(std::tr1::function<T(const T &, const T &)> callback, const T & initialValue, size_t startFrom) {
+T Array<T>::reduce(std::tr1::function<T(const T &, const T &)> callback, const T & initialValue, size_t startFrom) const {
     return std::accumulate(data_.begin() + startFrom, data_.end(), initialValue, callback);
 }
 
