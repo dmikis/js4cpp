@@ -102,6 +102,19 @@ public:
     }
 
     /**
+     * Get the last index at which a given element can be found in the array
+     * @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/lastIndexOf
+     *
+     * @param item Item last index of which we want to find out.
+     * @returns Item's last index or -1 if item does not exist in the array.
+     */
+    ssize_t lastIndexOf(const T & item) const {
+        size_t lastIndex = std::find(data_.rbegin(), data_.rend(), item) - data_.rbegin();
+
+        return data_.size() - lastIndex - 1;
+    }
+
+    /**
      * Push value to the end of array.
      * @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/push
      *

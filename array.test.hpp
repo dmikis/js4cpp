@@ -33,6 +33,11 @@ public:
         CPPUNIT_ASSERT( arr->indexOf(5) == 5 );
     }
 
+    void testLastIndexOf() {
+        arr->push(1);
+        CPPUNIT_ASSERT( arr->lastIndexOf(1) == 10 );
+    }
+
     void testFilter() {
         using std::tr1::bind;
         using std::tr1::placeholders::_1;
@@ -120,6 +125,7 @@ public:
 
         CPPUNIT_TEST( testLength );
         CPPUNIT_TEST( testIndexOf );
+        CPPUNIT_TEST( testLastIndexOf );
         CPPUNIT_TEST( testFilter );
         CPPUNIT_TEST( testReduce );
         CPPUNIT_TEST( testEvery );
