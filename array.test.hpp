@@ -33,7 +33,7 @@ public:
         using std::tr1::bind;
         using std::tr1::placeholders::_1;
 
-        CPPUNIT_ASSERT(arr->filter(bind(std::greater<int>(), _1, 5)).length() == 4 );
+        CPPUNIT_ASSERT( arr->filter(bind(std::greater<int>(), _1, 5)).length() == 4 );
     }
 
     void testReduce() {
@@ -44,9 +44,18 @@ public:
         using std::tr1::bind;
         using std::tr1::placeholders::_1;
 
-        CPPUNIT_ASSERT(arr->every(bind(std::greater_equal<int>(), _1, 0)) );
+        CPPUNIT_ASSERT( arr->every(bind(std::greater_equal<int>(), _1, 0)) );
 
-        CPPUNIT_ASSERT(!arr->every(bind(std::not_equal_to<int>(), _1, 5)) );
+        CPPUNIT_ASSERT( !arr->every(bind(std::not_equal_to<int>(), _1, 5)) );
+    }
+
+    void testSome() {
+        using std::tr1::bind;
+        using std::tr1::placeholders::_1;
+
+        CPPUNIT_ASSERT( arr->some(bind(std::equal_to<int>(), _1, 8)) );
+
+        CPPUNIT_ASSERT( !arr->some(bind(std::equal_to<int>(), _1, 11)) );
     }
 
     void testSlice() {
@@ -109,6 +118,7 @@ public:
         CPPUNIT_TEST( testFilter );
         CPPUNIT_TEST( testReduce );
         CPPUNIT_TEST( testEvery );
+        CPPUNIT_TEST( testSome );
         CPPUNIT_TEST( testPopPush );
         CPPUNIT_TEST( testShiftUnshift );
 

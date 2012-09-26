@@ -235,6 +235,17 @@ public:
     }
 
     /**
+     * Tests whether any of elements in the array pass the test implemented by the provided function.
+     * @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/some
+     *
+     * @param condition Test implementation.
+     * @returns `true` if at least one element passed the test and `false` otherwise.
+     */
+    bool some(std::tr1::function<bool(const T &)> condition) const {
+        return std::find_if(data_.begin(), data_.end(), condition) != data_.end();
+    }
+
+    /**
      * Create new array consists of only this array's elements passed the test.
      * @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/filter
      *
