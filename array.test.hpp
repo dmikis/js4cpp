@@ -29,6 +29,10 @@ public:
         CPPUNIT_ASSERT( arr->length() == 10 );
     }
 
+    void testIndexOf() {
+        CPPUNIT_ASSERT( arr->indexOf(5) == 5 );
+    }
+
     void testFilter() {
         using std::tr1::bind;
         using std::tr1::placeholders::_1;
@@ -115,6 +119,7 @@ public:
     CPPUNIT_TEST_SUITE( ArrayTest );
 
         CPPUNIT_TEST( testLength );
+        CPPUNIT_TEST( testIndexOf );
         CPPUNIT_TEST( testFilter );
         CPPUNIT_TEST( testReduce );
         CPPUNIT_TEST( testEvery );
