@@ -93,10 +93,11 @@ public:
      * @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/indexOf
      *
      * @param item Item index of which we want to find out.
+     * @param fromIndex The index at which to begin the search.
      * @returns Item's index or -1 if item does not exist in the array.
      */
-    ssize_t indexOf(const T & item) const {
-        size_t index = std::find(data_.begin(), data_.end(), item) - data_.begin();
+    ssize_t indexOf(const T & item, size_t fromIndex = 0) const {
+        size_t index = std::find(data_.begin() + fromIndex, data_.end(), item) - data_.begin();
 
         return index < data_.size() ? index : -1;
     }
@@ -106,10 +107,11 @@ public:
      * @see https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/lastIndexOf
      *
      * @param item Item last index of which we want to find out.
+     * @param fromIndex The index at which to begin the search.
      * @returns Item's last index or -1 if item does not exist in the array.
      */
-    ssize_t lastIndexOf(const T & item) const {
-        size_t lastIndex = std::find(data_.rbegin(), data_.rend(), item) - data_.rbegin();
+    ssize_t lastIndexOf(const T & item, size_t fromIndex = 0) const {
+        size_t lastIndex = std::find(data_.rbegin() + fromIndex, data_.rend(), item) - data_.rbegin();
 
         return data_.size() - lastIndex - 1;
     }
